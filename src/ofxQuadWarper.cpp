@@ -10,6 +10,7 @@
  */
 #include "ofxQuadWarper.h"
 
+#include "ofMain.h"
 #include "matrix_funcs.h"
 #include "ofConstants.h"
 #include "ofXml.h"

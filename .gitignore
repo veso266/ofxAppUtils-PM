@@ -1,49 +1,113 @@
-# libs
-*.a
+#########################
+# openFrameworks patterns
+#########################
+
+# build files
+openFrameworks.a
+openFrameworksDebug.a
+openFrameworksUniversal.a
+libs/openFrameworksCompiled/lib/*/*
+!libs/openFrameworksCompiled/lib/*/.gitkeep
+
+# apothecary
+scripts/apothecary/build
+
+# rule to avoid non-official addons going into git
+# see addons/.gitignore
+addons/*
+
+# rule to avoid non-official apps going into git
+# see apps/.gitignore
+apps/*
+
+# also, see examples/.gitignore
+
+#########################
+# general
+#########################
+
+[Bb]uild/
+[Oo]bj/
+*.o
+[Dd]ebug*/
+[Rr]elease*/
+*.mode*
+*.app/
+*.pyc
+.svn/
+*.log
+*.cpp.eep
+*.cpp.elf
+*.cpp.hex
+
+#########################
+# IDE
+#########################
+
+# XCode
+*.pbxuser
+*.perspective
+*.perspectivev3
+*.mode1v3
+*.mode2v3
+# XCode 4
+xcuserdata
+*.xcworkspace
+
+# AppCode
+.idea/
+
+# Code::Blocks
+*.depend
+*.layout
+
+# Visual Studio
+*.sdf
+*.opensdf
+*.suo
+*.pdb
+*.ilk
+*.aps
+ipch/
+
+# Eclipse
+.metadata
+local.properties
+.externalToolBuilders
+
+#########################
+# operating system
+#########################
+
+# Linux
+*~
+# KDE
+.directory
+.AppleDouble
 
 # OSX
 .DS_Store
-*.app
+*.swp
+*~.nib
+# Thumbnails
+._*
 
-# win
-*.exe
-*.dll
-*.lib
+# Windows
+# Windows image file caches
+Thumbs.db
+# Folder config file
+Desktop.ini
 
-# xcode
-*.pbxuser
-*.perspectivev3
-xcuserdata
-xcshareddata
-build
-*.mode1v3
+# Android
+.csettings
+/libs/openFrameworksCompiled/project/android/paths.make
 
-# codeblocks
-*.layout
-*.depend
+# Android Studio
+*.iml
 
-# visual studio
-*.exp
-*.ilk
-*.pdb
-*.sdf
-*.v11.suo
+#########################
+# miscellaneous
+#########################
 
-# examples
-appUtilsExample/obj
-appUtilsExample/bin/libs
-appUtilsExample/bin/appUtilsExample
-appUtilsExample/bin/appUtilsExample_debug
-appUtilsExample/Makefile
-appUtilsExample/Project.xcconfig
-appUtilsExample/addons.make
-appUtilsExample/appUtilsExample.xcodeproj/
-appUtilsExample/config.make
-appUtilsExample/openFrameworks-Info.plist
+.mailmap
 
-appUtilsIOSExample/Project.xcconfig
-appUtilsIOSExample/addons.make
-appUtilsIOSExample/appUtilsIOSExample.xcodeproj/
-appUtilsIOSExample/ofxiOS-Info.plist
-appUtilsIOSExample/ofxiOS_Prefix.pch
-appUtilsIOSExample/bin/data/*.png
