@@ -288,6 +288,12 @@ void ofxSceneManager::keyPressed(int key) {
 	}
 }
 
+void ofxSceneManager::keyPressed(ofKeyEventArgs &keyargs) {
+    if(!_scenes.empty() && _currentScene >= 0) {
+        _currentScenePtr->keyPressed(keyargs);
+    }
+}
+
 void ofxSceneManager::keyReleased(int key) {
 	if(!_scenes.empty() && _currentScene >= 0) {
 		_currentScenePtr->keyReleased(key);

@@ -103,6 +103,7 @@ class ofxSceneManager {
 		/// exit() is called automatically on removal/clear
 
 		void keyPressed(int key);
+        void keyPressed(ofKeyEventArgs &keyargs);
 		void keyReleased(int key);
 
 		void mouseMoved(int x, int y);

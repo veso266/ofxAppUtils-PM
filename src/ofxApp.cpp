@@ -171,6 +171,13 @@ void ofxApp::RunnerApp::keyPressed(int key) {
 	app->keyPressed(key);
 }
 
+void ofxApp::RunnerApp::keyPressed(ofKeyEventArgs &keyargs){
+    if(app->_sceneManager) {
+        app->_sceneManager->keyPressed(keyargs);
+    }
+    app->keyPressed(keyargs);
+}
+
 //--------------------------------------------------------------
 void ofxApp::RunnerApp::keyReleased(int key) {
 	if(app->_sceneManager) {
