@@ -32,6 +32,16 @@ inline void ofRunAppWithAppUtils(ofxApp* app) {
 	#endif
 }
 
+inline void ofRunAppWithAppUtils(shared_ptr<ofAppBaseWindow> window, ofxApp* app) {
+    
+    // wrap up user app with runner
+#ifdef TARGET_OF_IPHONE
+//    ofRunApp((ofxiOSApp*) new ofxApp::RunnerApp(app));
+#else
+    ofRunApp(window, shared_ptr<ofBaseApp>((ofBaseApp*)new ofxApp::RunnerApp(app)));
+#endif
+}
+
 /// get the global ofxApp ptr, important! use this INSTEAD of ofGetAppPtr()
 /// if you started your app with ofRunAppWithAppUtils()
 inline ofxApp* ofxGetAppPtr() {
