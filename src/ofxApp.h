@@ -11,8 +11,9 @@
 #pragma once
 
 #include "ofConstants.h"
-#ifdef TARGET_OF_IPHONE
-	#include "ofxiPhone.h"
+#include "ofColor.h"
+#ifdef TARGET_OF_IOS
+	#include "ofxiOS.h"
 #else
 	#include "ofBaseApp.h"
 #endif
@@ -32,7 +33,7 @@ class ofxSceneManager;
 ///	ie setup(), update(), draw(), etc
 class ofxApp :
 
-#ifdef TARGET_OF_IPHONE
+#ifdef TARGET_OF_IOS
 	public ofxiOSApp {
 #else
 	public ofBaseApp {
@@ -94,7 +95,7 @@ class ofxApp :
 		/// the scene manager's update, draw, and input callback functions are
 		/// called automatically which, in turn, calls those of the current scene
 		///
-		void setSceneManager(ofxSceneManager* manager);
+		void setSceneManager(ofxSceneManager *manager);
 		ofxSceneManager* getSceneManager();
 		void clearSceneManager();
 		
@@ -135,12 +136,12 @@ class ofxApp :
 	private:
 		
 		ofxTransformer *_transformer; //< optional built in transformer
-		bool _bAutoTransforms;      //< apply the transforms automatically? default: true
+		bool _bAutoTransforms; //< apply the transforms automatically? default: true
 		
-		bool _bDrawFramerate;       //< draw the dramerate in debug mode? default: true
-		ofColor _framerateColor;    //< framerate text color
+		bool _bDrawFramerate; //< draw the dramerate in debug mode? default: true
+		ofColor _framerateColor; //< framerate text color
 		
-		ofxSceneManager* _sceneManager; //< optional built in scene manager
+		ofxSceneManager *_sceneManager; //< optional built in scene manager
 		bool _bSceneManagerUpdate; //< call scene manager update automatically?
 		bool _bSceneManagerDraw; //< call scene manager draw automatically?
 
@@ -150,7 +151,7 @@ class ofxApp :
 		/// do not use directly!
 		class RunnerApp :
 
-		#ifdef TARGET_OF_IPHONE
+		#ifdef TARGET_OF_IOS
 			public ofxiOSApp {
 		#else
 			public ofBaseApp {
@@ -158,7 +159,7 @@ class ofxApp :
 			
 			public:
 
-				RunnerApp(ofxApp* app);
+				RunnerApp(ofxApp *app);
 				~RunnerApp();
 
 				// ofBaseApp callbacks
@@ -166,28 +167,32 @@ class ofxApp :
 				void update();
 				void draw();
 				void exit();
+				
+				void windowResized(int w, int h);
 
 				void keyPressed(int key);
 				void keyReleased(int key);
-                void keyPressed(ofKeyEventArgs &keyargs);
+				void keyPressed(ofKeyEventArgs &keyargs);
 
 				void mouseMoved(int x, int y);
 				void mouseDragged(int x, int y, int button);
 				void mousePressed(int x, int y, int button);
 				void mouseReleased(int x, int y, int button);
+				void mouseScrolled(int x, int y, float scrollX, float scrollY);
+				void mouseEntered(int x, int y);
+				void mouseExited(int x, int y);
 				
-				void windowResized(int w, int h);
 				void dragEvent(ofDragInfo dragInfo);
 				void gotMessage(ofMessage msg);
 				
-			#ifdef TARGET_OF_IPHONE
+				void touchDown(int x, int y, int id);
+				void touchMoved(int x, int y, int id);
+				void touchUp(int x, int y, int id);
+				void touchDoubleTap(int x, int y, int id);
+				void touchCancelled(int x, int y, int id);
+				
+			#ifdef TARGET_OF_IOS
 				// ofxIOS callbacks
-				void touchDown(ofTouchEventArgs & touch);
-				void touchMoved(ofTouchEventArgs & touch);
-				void touchUp(ofTouchEventArgs & touch);
-				void touchDoubleTap(ofTouchEventArgs & touch);
-				void touchCancelled(ofTouchEventArgs & touch);
-
 				void lostFocus();
 				void gotFocus();
 				void gotMemoryWarning();
@@ -195,20 +200,22 @@ class ofxApp :
 			#endif
 				
 				// ofBaseSoundInput callbacks
-				void audioIn(float * input, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount);
-				void audioIn(float * input, int bufferSize, int nChannels );
-				void audioReceived(float * input, int bufferSize, int nChannels);
+				void audioIn(ofSoundBuffer& buffer);
+				void audioIn(float *input, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount);
+				void audioIn(float *input, int bufferSize, int nChannels );
+				void audioReceived(float *input, int bufferSize, int nChannels);
 				
 				// ofBaseSoundOutput callbacks
-				void audioOut(float * output, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount);
-				void audioOut(float * output, int bufferSize, int nChannels);
-				void audioRequested(float * output, int bufferSize, int nChannels);
+				void audioOut(ofSoundBuffer& buffer);
+				void audioOut(float *output, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount);
+				void audioOut(float *output, int bufferSize, int nChannels);
+				void audioRequested(float *output, int bufferSize, int nChannels);
 				
 				ofxApp* getAppPtr() {return app;}
 				
 			private:
 			
-				ofxApp* app;
+				ofxApp *app;
 		};
 		
 		friend class RunnerApp; ///< used to wrap this app

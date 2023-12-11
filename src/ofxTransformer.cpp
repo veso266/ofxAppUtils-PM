@@ -12,6 +12,7 @@
 
 #include "ofAppRunner.h"
 #include "ofGraphics.h"
+#include "ofFileUtils.h"
 
 //--------------------------------------------------------------
 ofxTransformer::ofxTransformer() {
@@ -126,13 +127,13 @@ void ofxTransformer::applyRenderScale() {
 
 //--------------------------------------------------------------
 void ofxTransformer::applyMirrorX() {
-	ofRotateY(180);
+	ofRotateYDeg(180);
 	ofTranslate(-_renderWidth, 0, 0);
 }
 
 //--------------------------------------------------------------
 void ofxTransformer::applyMirrorY() {
-	ofRotateX(180);
+	ofRotateXDeg(180);
 	ofTranslate(0, -_renderHeight, 0);
 }
 
@@ -177,11 +178,11 @@ void ofxTransformer::push(bool forceWarp) {
 
 //--------------------------------------------------------------
 void ofxTransformer::pop() {
-	if(_bWarp) {
-		popWarp();
-	}
 	if(!_bTransformsPushed) {
 		return; // avoid extra pops
+	}
+	if(_bWarp) {
+		popWarp();
 	}
 	ofPopMatrix();
 	_bTransformsPushed = false;
@@ -317,7 +318,7 @@ void ofxTransformer::resetWarp() {
 }
 
 //--------------------------------------------------------------
-bool ofxTransformer::loadWarpSettings(const string &xmlFile) {
+bool ofxTransformer::loadWarpSettings(const std::string &xmlFile) {
 	if(ofFile::doesFileExist(ofToDataPath(xmlFile))) {
 		return _quadWarper.loadSettings(xmlFile);
 	}
@@ -325,7 +326,7 @@ bool ofxTransformer::loadWarpSettings(const string &xmlFile) {
 }
 
 //--------------------------------------------------------------
-void ofxTransformer::saveWarpSettings(const string &xmlFile) {
+void ofxTransformer::saveWarpSettings(const std::string &xmlFile) {
 	return _quadWarper.saveSettings(xmlFile);
 }
 
@@ -354,6 +355,8 @@ void ofxTransformer::drawWarpBounds() {
 	if(!_bEditingWarpPoints) {
 		return;
 	}
+
+	ofPushStyle();
 	
 	// push transforms if needed (for manual mode)
 	bool doTransform = !_bTransformsPushed;
@@ -364,12 +367,13 @@ void ofxTransformer::drawWarpBounds() {
 	ofNoFill();
 	ofSetColor(ofColor::green);
 	ofSetRectMode(OF_RECTMODE_CORNER);
-	ofRect(0.35, 0.35, _renderWidth-1.35, _renderHeight-1.35);
-	ofFill();
+	ofDrawRectangle(0.35, 0.35, _renderWidth-1.35, _renderHeight-1.35);
 	
 	if(doTransform) {
 		pop();
 	}
+
+	ofPopStyle();
 }
 
 //--------------------------------------------------------------
@@ -378,10 +382,12 @@ void ofxTransformer::drawWarpEditor() {
 		return;
 	}
 
+	ofPushStyle();
+
 	// draw the quad warper editor
-	stringstream text;
-	text << "Quad Warper Edit Mode" << endl
-		 << "Drag the corner control points" << endl
+	std::stringstream text;
+	text << "Quad Warper Edit Mode" << std::endl
+		 << "Drag the corner control points" << std::endl
 		 << "Click center rectangle to exit";
 	ofDrawBitmapStringHighlight(text.str(), 28, 28, ofColor::black, ofColor::green);
 		
@@ -389,11 +395,12 @@ void ofxTransformer::drawWarpEditor() {
 	ofSetColor(ofColor::green);
 	ofNoFill();
 	ofSetRectMode(OF_RECTMODE_CENTER);
-	ofRect(ofGetWidth()/2, ofGetHeight()/2, 100, 100);
-	ofSetRectMode(OF_RECTMODE_CORNER);
+	ofDrawRectangle(ofGetWidth()/2, ofGetHeight()/2, 100, 100);
+
 	ofFill();
-	
 	_quadWarper.drawPoints();
+
+	ofPopStyle();
 }
 
 //--------------------------------------------------------------

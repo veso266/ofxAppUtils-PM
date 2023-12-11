@@ -10,10 +10,12 @@
  */
 #include "ofxScene.h"
 
+#include "ofAppRunner.h"
+
 /// RUNNER SCENE
 
 //--------------------------------------------------------------
-ofxScene::RunnerScene::RunnerScene(ofxScene* scene) {
+ofxScene::RunnerScene::RunnerScene(ofxScene *scene) {
 	this->scene = scene;
 }
 

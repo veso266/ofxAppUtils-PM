@@ -11,8 +11,8 @@
 #pragma once
 
 #include "ofxTimer.h"
+#include "ofPoint.h"
 #include "ofRectangle.h"
-
 
 ///	\class  Particle
 ///	\brief  a particle with a lifespan, inherit this to add vel, acc, & behavior
@@ -26,10 +26,10 @@ class ofxParticle : public ofRectangle {
 		virtual ~ofxParticle();
 
 		/// copy constructor
-		ofxParticle(const ofxParticle& from);
+		ofxParticle(const ofxParticle &from);
 
 		/// copy operator
-		ofxParticle& operator=(const ofxParticle& from);
+		ofxParticle& operator=(const ofxParticle &from);
 
 
 	/// \section Main

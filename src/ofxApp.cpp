@@ -12,6 +12,7 @@
 
 #include "ofGraphics.h"
 #include "ofAppRunner.h"
+#include "ofLog.h"
 #include "ofxSceneManager.h"
 
 // APP
@@ -62,7 +63,7 @@ float ofxApp::getRenderHeight() {
 // SCENE MANAGER
 
 //--------------------------------------------------------------
-void ofxApp::setSceneManager(ofxSceneManager* manager) {
+void ofxApp::setSceneManager(ofxSceneManager *manager) {
 	if(manager == NULL) {
 		ofLogWarning("ofxApp") << "cannot add NULL scene manager";
 		return;
@@ -91,7 +92,7 @@ void ofxApp::drawFramerate(float x, float y) {
 // RUNNER APP
 
 //--------------------------------------------------------------
-ofxApp::RunnerApp::RunnerApp(ofxApp* app) {
+ofxApp::RunnerApp::RunnerApp(ofxApp *app) {
 	this->app = app;
 }
 
@@ -140,7 +141,7 @@ void ofxApp::RunnerApp::draw() {
 	// pop transforms & draw the quad warper bounds (if editing)
 	if(app->_transformer) {
 		app->_transformer->popWarp();
-		app->_transformer->drawWarpBounds();
+		//app->_transformer->drawWarpBounds();
 		app->_transformer->pop();
 	}
 	
@@ -164,18 +165,28 @@ void ofxApp::RunnerApp::exit() {
 }
 
 //--------------------------------------------------------------
+void ofxApp::RunnerApp::windowResized(int w, int h) {
+	if(app->_sceneManager) {
+		app->_sceneManager->windowResized(w, h);
+	}
+	if(app->getTransformer()) {
+		app->_transformer->setNewScreenSize(w, h);
+	}
+	app->windowResized(w, h);
+}
+
+//--------------------------------------------------------------
 void ofxApp::RunnerApp::keyPressed(int key) {
 	if(app->_sceneManager) {
 		app->_sceneManager->keyPressed(key);
 	}
 	app->keyPressed(key);
 }
-
-void ofxApp::RunnerApp::keyPressed(ofKeyEventArgs &keyargs){
-    if(app->_sceneManager) {
-        app->_sceneManager->keyPressed(keyargs);
-    }
-    app->keyPressed(keyargs);
+void ofxApp::RunnerApp::keyPressed(ofKeyEventArgs &keyargs) {
+	if (app->_sceneManager) {
+		app->_sceneManager->keyPressed(keyargs);
+	}
+	app->keyPressed(keyargs);
 }
 
 //--------------------------------------------------------------
@@ -234,14 +245,27 @@ void ofxApp::RunnerApp::mouseReleased(int x, int y, int button) {
 }
 
 //--------------------------------------------------------------
-void ofxApp::RunnerApp::windowResized(int w, int h) {
+void ofxApp::RunnerApp::mouseScrolled(int x, int y, float scrollX, float scrollY) {
 	if(app->_sceneManager) {
-		app->_sceneManager->windowResized(w, h);
+		app->_sceneManager->mouseScrolled(x, y, scrollX, scrollY);
 	}
-	if(app->getTransformer()) {
-		app->_transformer->setNewScreenSize(w, h);
+	app->mouseScrolled(x, y, scrollX, scrollY);
+}
+
+//--------------------------------------------------------------
+void ofxApp::RunnerApp::mouseEntered(int x, int y) {
+	if(app->_sceneManager) {
+		app->_sceneManager->mouseEntered(x, y);
 	}
-	app->windowResized(w, h);
+	app->mouseEntered(x, y);
+}
+
+//--------------------------------------------------------------
+void ofxApp::RunnerApp::mouseExited(int x, int y) {
+	if(app->_sceneManager) {
+		app->_sceneManager->mouseExited(x, y);
+	}
+	app->mouseExited(x, y);
 }
 
 //--------------------------------------------------------------
@@ -260,22 +284,69 @@ void ofxApp::RunnerApp::gotMessage(ofMessage msg){
 	app->gotMessage(msg);
 }
 
+//--------------------------------------------------------------
+void ofxApp::RunnerApp::touchDown(int x, int y, int id) {
+	if(app->_sceneManager) {
+		app->_sceneManager->touchDown(x, y, id);
+	}
+	app->touchDown(x, y, id);
+}
+
+//--------------------------------------------------------------
+void ofxApp::RunnerApp::touchMoved(int x, int y, int id) {
+	if(app->_sceneManager) {
+		app->_sceneManager->touchMoved(x, y, id);
+	}
+	app->touchMoved(x, y, id);
+}
+
+//--------------------------------------------------------------
+void ofxApp::RunnerApp::touchUp(int x, int y, int id) {
+	if(app->_sceneManager) {
+		app->_sceneManager->touchUp(x, y, id);
+	}
+	app->touchUp(x, y, id);
+}
+
+//--------------------------------------------------------------
+void ofxApp::RunnerApp::touchDoubleTap(int x, int y, int id) {
+	if(app->_sceneManager) {
+		app->_sceneManager->touchDoubleTap(x, y, id);
+	}
+	app->touchDoubleTap(x, y, id);
+}
+
+//--------------------------------------------------------------
+void ofxApp::RunnerApp::touchCancelled(int x, int y, int id) {
+	if(app->_sceneManager) {
+		app->_sceneManager->touchCancelled(x, y, id);
+	}
+	app->touchCancelled(x, y, id);
+}
+
 // ofBaseSoundInput
 //--------------------------------------------------------------
-void ofxApp::RunnerApp::audioIn(float * input, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount) {
+void ofxApp::RunnerApp::audioIn(ofSoundBuffer& buffer) {
+	if(app->_sceneManager) {
+		app->_sceneManager->audioIn(buffer);
+	}
+	app->audioIn(buffer);
+}
+
+void ofxApp::RunnerApp::audioIn(float *input, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount) {
 	if(app->_sceneManager) {
 		app->_sceneManager->audioIn(input, bufferSize, nChannels, deviceID, tickCount);
 	}
 	app->audioIn(input, bufferSize, nChannels, deviceID, tickCount);
 }
 
-void ofxApp::RunnerApp::audioIn(float * input, int bufferSize, int nChannel ) {
+void ofxApp::RunnerApp::audioIn(float *input, int bufferSize, int nChannel ) {
 	if(app->_sceneManager) {
 		app->_sceneManager->audioIn(input, bufferSize, nChannel);
 	}
 	app->audioIn(input, bufferSize, nChannel);
 }
-void ofxApp::RunnerApp::audioReceived(float * input, int bufferSize, int nChannels) {
+void ofxApp::RunnerApp::audioReceived(float *input, int bufferSize, int nChannels) {
 	if(app->_sceneManager) {
 		app->_sceneManager->audioIn(input, bufferSize, nChannels);
 	}
@@ -284,65 +355,37 @@ void ofxApp::RunnerApp::audioReceived(float * input, int bufferSize, int nChanne
 
 // ofBaseSoundOutput
 //--------------------------------------------------------------
-void ofxApp::RunnerApp::audioOut(float * output, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount) {
+void ofxApp::RunnerApp::audioOut(ofSoundBuffer& buffer) {
+	if(app->_sceneManager) {
+		app->_sceneManager->audioOut(buffer);
+	}
+	app->audioOut(buffer);
+}
+
+void ofxApp::RunnerApp::audioOut(float *output, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount) {
 	if(app->_sceneManager) {
 		app->_sceneManager->audioOut(output, bufferSize, nChannels, deviceID, tickCount);
 	}
 	app->audioOut(output, bufferSize, nChannels, deviceID, tickCount);
 }
 
-void ofxApp::RunnerApp::audioOut(float * output, int bufferSize, int nChannels) {
+void ofxApp::RunnerApp::audioOut(float *output, int bufferSize, int nChannels) {
 	if(app->_sceneManager) {
 		app->_sceneManager->audioOut(output, bufferSize, nChannels);
 	}
 	app->audioOut(output, bufferSize, nChannels);
 }
 
-void ofxApp::RunnerApp::audioRequested(float * output, int bufferSize, int nChannels) {
+void ofxApp::RunnerApp::audioRequested(float *output, int bufferSize, int nChannels) {
 	if(app->_sceneManager) {
 		app->_sceneManager->audioOut(output, bufferSize, nChannels);
 	}
 	app->audioOut(output, bufferSize, nChannels);
 }
 
-#ifdef TARGET_OF_IPHONE
+#ifdef TARGET_OF_IOS
 // ofxiOSApp
 //--------------------------------------------------------------
-void ofxApp::RunnerApp::touchDown(ofTouchEventArgs & touch) {
-	if(app->_sceneManager) {
-		app->_sceneManager->touchDown(touch);
-	}
-	app->touchDown(touch);
-}
-
-void ofxApp::RunnerApp::touchMoved(ofTouchEventArgs & touch) {
-	if(app->_sceneManager) {
-		app->_sceneManager->touchMoved(touch);
-	}
-	app->touchMoved(touch);
-}
-
-void ofxApp::RunnerApp::touchUp(ofTouchEventArgs & touch) {
-	if(app->_sceneManager) {
-		app->_sceneManager->touchUp(touch);
-	}
-	app->touchUp(touch);
-}
-
-void ofxApp::RunnerApp::touchDoubleTap(ofTouchEventArgs & touch) {
-	if(app->_sceneManager) {
-		app->_sceneManager->touchDoubleTap(touch);
-	}
-	app->touchDoubleTap(touch);
-}
-
-void ofxApp::RunnerApp::touchCancelled(ofTouchEventArgs & touch) {
-	if(app->_sceneManager) {
-		app->_sceneManager->touchCancelled(touch);
-	}
-	app->touchCancelled(touch);
-}
-
 void ofxApp::RunnerApp::lostFocus() {
 	if(app->_sceneManager) {
 		app->_sceneManager->lostFocus();
